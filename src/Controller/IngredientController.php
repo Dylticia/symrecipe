@@ -5,11 +5,8 @@ namespace App\Controller;
 use App\Entity\Ingredient;
 use App\Form\IngredientType;
 use App\Repository\IngredientRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use PhpParser\Builder\Function_;
-use PhpParser\Node\Expr\FuncCall;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,7 +22,7 @@ class IngredientController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    #[Route('/ingredient', name: 'ingredient_index', methods: ['GET'])]
+    #[Route('/ingredient', name: 'ingredient.index', methods: ['GET'])]
     // injection de dependance 
     public function index(
         IngredientRepository $repository,
@@ -51,6 +48,14 @@ class IngredientController extends AbstractController
      * @return Response
      */
     #[Route('/ingredient/nouveau', 'ingredient.new', methods: ['GET', 'POST'])]
+
+    /**
+     * This controller allow us to delete an ingredient
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     public function new(
         Request $request,
         EntityManagerInterface $manager
@@ -71,7 +76,7 @@ class IngredientController extends AbstractController
                 'Votre ingrédient a été crée avec succès !'
             );
 
-            return $this->redirectToRoute('ingredient_index');
+            return $this->redirectToRoute('ingredient.index');
         }
 
         return $this->render('pages/ingredient/new.html.twig', [
@@ -79,8 +84,23 @@ class IngredientController extends AbstractController
         ]);
     }
 
+  
+
     #[Route('/ingredient/edition/{id}', 'ingredient.edit', methods: ['GET', 'POST'])]
-    public function edit(IngredientRepository $repository, int $id, Request $request, EntityManagerInterface $manager): Response
+   /**
+    * This controller allow us to update an ingredient
+    *
+    * @param IngredientRepository $repository
+    * @param integer $id
+    * @param Request $request
+    * @param EntityManagerInterface $manager
+    * @return Response
+    */
+    public function edit(
+        IngredientRepository $repository, 
+        int $id, Request $request, 
+        EntityManagerInterface $manager
+        ): Response
     {
         $ingredient = $repository->findOneBy(["id" => $id]);
         $form = $this->createForm(IngredientType::class, $ingredient);
@@ -97,7 +117,7 @@ class IngredientController extends AbstractController
                 'Votre ingrédient a été modifié avec succès !'
             );
 
-            return $this->redirectToRoute('ingredient_index');
+            return $this->redirectToRoute('ingredient.index');
         }
 
         return $this->render('pages/ingredient/edit.html.twig', [
@@ -106,7 +126,11 @@ class IngredientController extends AbstractController
     }
 
     #[Route('/ingredient/suppression/{id}', 'ingredient.delete', methods: ['GET'])]
-    public function delete(IngredientRepository $repository, EntityManagerInterface $manager, int $id): Response
+    public function delete(
+        IngredientRepository $repository, 
+        EntityManagerInterface $manager, 
+        int $id
+        ): Response
     {
         // si ingredient n'existe pas on redirige l'utilisateur vers la page citée
         $ingredient = $repository->findOneBy(["id" => $id]);
@@ -119,6 +143,6 @@ class IngredientController extends AbstractController
             'Votre ingrédient a été supprimé avec succès !'
         );
 
-        return $this->redirectToRoute('ingredient_index');
+        return $this->redirectToRoute('ingredient.index');
     }
 }

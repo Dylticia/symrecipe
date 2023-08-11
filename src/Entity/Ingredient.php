@@ -17,7 +17,7 @@ class Ingredient
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Assert\NotNull]
+    #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 50)]
     private ?string $name = null;
 
@@ -78,4 +78,12 @@ class Ingredient
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
+
 }
+
+
