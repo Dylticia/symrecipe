@@ -21,7 +21,7 @@ class Recipe
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank()]
     #[Assert\Length(min: 2, max: 50)]
     private ?string $name = null;
 
@@ -41,7 +41,7 @@ class Recipe
     private ?int $difficulty = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank()]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
@@ -53,11 +53,11 @@ class Recipe
     private ?bool $isFavorite = null;
 
     #[ORM\Column]
-    #[Assert\NotNull]
+    #[Assert\NotNull()]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Assert\NotNull]
+    #[Assert\NotNull()]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToMany(targetEntity: Ingredient::class)]
